@@ -20,12 +20,15 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
   app.get(/.*/, (req, resp) => {
-  resp.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-});
-
+    resp.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
 }
-
-app.listen(PORT, () => {
-  connectDb();
-  console.log("Server Started & Running on Port: ", PORT);
-});
+connectDb()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`✅ Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ Failed to connect to MongoDB:", err);
+  });
