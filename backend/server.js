@@ -1,34 +1,44 @@
 import express from "express";
+import cors from "cors";
+import session from "express-session";
 import dotenv from "dotenv";
-import { connectDb } from "./config/db.js";
-import todoRoutes from "./routes/todo.route.js";
-import path from "path";
-
-const PORT = process.env.PORT || 3000;
-
-dotenv.config();
+import userRouter from "./routes/user.route.js";
+import todoRouter from "./routes/todo.route.js";
+import MySQLStore from "express-mysql-session";
+import db from "./config/db.js";
 
 const app = express();
-
 app.use(express.json());
+dotenv.config();
 
-app.use("/api/todos", todoRoutes);
-
-const __dirname = path.resolve();
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
-  app.get(/.*/, (req, resp) => {
-    resp.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-  });
-}
-connectDb()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`✅ Server running on port ${PORT}`);
-    });
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true,
   })
-  .catch((err) => {
-    console.error("❌ Failed to connect to MongoDB:", err);
-  });
+);
+
+// ✅ Persistent MySQL session store
+const MySQLSessionStore = MySQLStore(session);
+const sessionStore = new MySQLSessionStore({}, db.promise());
+
+app.use(
+  session({
+    secret: "hello bro I am zaid nice to meet you",
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
+
+app.use(userRouter);
+app.use(todoRouter);
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});

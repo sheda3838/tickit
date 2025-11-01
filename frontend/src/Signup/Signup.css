@@ -1,0 +1,115 @@
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #dbeafe, #93c5fd);
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+}
+
+.signup-box {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 340px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.signup-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.signup-box h1 {
+  margin-bottom: 0.8rem;
+  color: #1d4ed8;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.signup-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.signup-box label {
+  text-align: left;
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.signup-box input {
+  padding: 0.6rem;
+  border-radius: 10px;
+  border: 1.8px solid #d1d5db;
+  outline: none;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.signup-box input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.25);
+}
+
+.signup-box button {
+  background: linear-gradient(to right, #2563eb, #1e40af);
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.signup-box button:hover {
+  background: linear-gradient(to right, #1e40af, #1d4ed8);
+  transform: translateY(-2px);
+}
+
+.google-login {
+  display: flex;
+  justify-content: center;
+  margin: 0.6rem 0;
+}
+
+.signup-box h3 {
+  margin-top: 0.6rem;
+  font-weight: 500;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.signup-box a {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signup-box a:hover {
+  text-decoration: underline;
+}
+
+.app-logo {
+  width: 150px;
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}

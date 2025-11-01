@@ -1,0 +1,308 @@
+/* 🌈 Background */
+.home-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #dbeafe, #93c5fd);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* 🪄 Card */
+.home-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 550px;
+  padding: 30px;
+  transition: all 0.3s ease;
+  position: relative; /* for logout button */
+}
+
+.greeting {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #AAE863, #41D361, #68E44F, #1CBE7C, #61DE50);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* fallback for some browsers */
+}
+
+/* 📝 Form */
+.todo-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.todo-input:focus {
+  border-color: #2563eb;
+}
+
+/* 🧩 Buttons */
+.btn {
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  padding: 10px 18px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1e40af, #1d4ed8);
+  transform: translateY(-1px);
+}
+
+
+.btn-update {
+  background: #3b82f6;
+  color: #fff;
+  padding: 6px 10px;
+}
+
+.btn-update:hover {
+  background: #2563eb;
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: #fff;
+  padding: 6px 10px;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+  padding: 6px 10px;
+}
+
+.btn-cancel {
+  background: #9ca3af;
+  color: white;
+  padding: 6px 10px;
+}
+
+/* 🚪 Logout button (Top Right Corner) */
+.btn-logout {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: #ee2222;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-logout:hover {
+  background: #ff0000;
+  transform: translateY(-1px);
+}
+
+/* 👇 Button area stays same size (smooth morph) */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ✅ Todo List */
+.todo-list {
+  margin-top: 20px;
+}
+
+.todo-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.todo-item:hover {
+  transform: translateY(-2px);
+  background: #f9fafb;
+}
+
+.todo-show,
+.todo-edit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  transition: opacity 0.25s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.todo-edit {
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ✨ Circle Status Indicator (Tailwind style match) */
+.todo-status-circle {
+  height: 28px;
+  width: 28px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: #e5e7eb; /* gray-200 */
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.todo-status-circle:hover {
+  background-color: #86efac; /* green-300 */
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.3);
+}
+
+.todo-status-circle.done {
+  background-color: #bbf7d0; /* green-200 */
+  transform: scale(1.05);
+}
+
+.todo-status-circle::before {
+  content: "" !important;
+}
+
+/* 🏷 Title */
+.todo-title {
+  flex: 1;
+  text-align: left;
+  font-size: 1rem;
+  color: #374151;
+  word-break: break-word;
+}
+
+/* ⏳ Loading */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
+
+/* 🌫 Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* 📦 Modal Box */
+.modal-box {
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px 30px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  animation: popUp 0.25s ease-in-out;
+}
+
+@keyframes popUp {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 🧩 Modal Buttons */
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn-cancel {
+  background: #9ca3af;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #6b7280;
+}
+
+.app-logo {
+  width: 150px;
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}

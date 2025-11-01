@@ -1,65 +1,123 @@
-import express, { text } from "express";
-import {Todo} from "../models/todo.model.js";
+import db from "../config/db.js";
+import { Router } from "express";
 
-const router = express.Router();
+const todoRouter = Router();
 
-// Get All Todos
-router.get("/", async (req, resp) => {
+// Insert new todo
+todoRouter.post("/api/todos/", (req, resp) => {
+  const { todo } = req.body;
+  const userId = req.session.userId;
+  if (!todo) {
+    return resp.json({ success: false, error: "Todo title is required" });
+  }
   try {
-    const todos = await Todo.find();
-    resp.json(todos);
+    db.query(
+      "INSERT INTO todos (`title`, `userId`) VALUES (?, ?)",
+      [todo, userId],
+      (err, data) => {
+        if (err) return resp.json({ success: false, error: err.message });
+
+        const insertedId = data.insertId;
+        // Fetch full inserted row
+        db.query(
+          "SELECT * FROM todos WHERE id = ?",
+          [insertedId],
+          (err2, rows) => {
+            if (err2) return resp.json({ success: false, error: err2.message });
+            if (rows.length === 0)
+              return resp.json({
+                success: false,
+                error: "Todo not found after insert",
+              });
+
+            // Return the actual inserted record
+            resp.json({ success: true, todo: rows[0] });
+          }
+        );
+      }
+    );
   } catch (err) {
-    resp.status(400).send("Something went wrong, Error: ", err.message);
+    return resp.json({ success: false, error: err.message });
   }
 });
 
-// Add a new todo
-router.post("/", async (req, resp) => {
+// Get all todos
+todoRouter.get("/api/todos", (req, resp) => {
+  const userId = req.session.userId;
   try {
-    const todo = new Todo({
-      text: req.body.text,
+    db.query("SELECT * FROM todos WHERE userId = ?", [userId],  (err, data) => {
+      if (err) return resp.json({ success: false, error: err.message });
+      if (data.length > 0) {
+        return resp.json({ success: true, todos: data });
+      } else {
+        return resp.json({ success: false});
+      }
     });
-    const newTodo = await todo.save();
-    resp.status(201).send(newTodo);
   } catch (err) {
-    resp.status(400).send("Something went wrong, Error: ", err.message);
+    return resp.json({ success: false, error: err.message });
   }
 });
 
 // Update a todo
-router.patch("/:id", async (req, resp) => {
+todoRouter.patch("/api/todos/:id", (req, resp) => {
+  const id = req.params.id;
+
+  if (!id) {
+    return resp.json({ success: false, error: "Id is required" });
+  }
+
+  const { title, completed } = req.body;
+
   try {
-    const id = req.params.id;
-    const todo = await Todo.findById(id);
+    // Fetch the existing todo
+    db.query("SELECT * FROM todos WHERE id = ?", [id], (err, data) => {
+      if (err) return resp.json({ success: false, error: err.message });
+      if (data.length === 0) {
+        return resp.json({ success: false, error: "Todo not found" });
+      }
 
-    if (!todo) {
-      return resp.status(404).send("Todo not found, Error: ", err.message);
-    }
+      const existingTodo = data[0];
 
-    if (req.body.text !== undefined) {
-      todo.text = req.body.text;
-    }
-    if (req.body.completed !== undefined) {
-      todo.completed = req.body.completed;
-    }
+      // Use the new value if provided, otherwise keep the old one
+      const updatedTitle = title ?? existingTodo.title;
+      const updatedCompleted = completed ?? existingTodo.completed;
 
-    const updatedTodo = await todo.save();
-    resp.status(201).json(updatedTodo);
+      // Update with merged values
+      db.query(
+        "UPDATE todos SET title = ?, completed = ? WHERE id = ?",
+        [updatedTitle, updatedCompleted, id],
+        (err2) => {
+          if (err2) return resp.json({ success: false, error: err2.message });
+
+          // Fetch and return the updated todo
+          db.query("SELECT * FROM todos WHERE id = ?", [id], (err3, data2) => {
+            if (err3) return resp.json({ success: false, error: err3.message });
+            resp.json({ success: true, todo: data2[0] });
+          });
+        }
+      );
+    });
   } catch (err) {
-    resp.status(400).send("Something went wrong, Error: ", err.message);
+    return resp.json({ success: false, error: err.message });
   }
 });
 
 // Delete a todo
-router.delete("/:id", async (req, resp) => {
+todoRouter.delete("/api/todos/:id", (req, resp) => {
+  const id = req.params.id;
+
+  if (!id) {
+    return resp.json({ success: false, error: "Id is required" });
+  }
+
   try {
-    const id = req.params.id;
-    const todo = await Todo.findByIdAndDelete(id);
-    resp.status(201).send("Todo deleted success");
-    
+    db.query("DELETE FROM todos WHERE id = ?", [id], (err, data) => {
+      if (err) return resp.json({ success: false, error: err.message });
+      resp.json({ success: true });
+    });
   } catch (err) {
-    resp.status(400).send("Something went wrong, Error: ", err.message);
+    return resp.json({ success: false, error: err.message });
   }
 });
 
-export default router;
+export default todoRouter;
