@@ -23,24 +23,30 @@ function Signup() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    axios
-      .post("/api/signup", values)
-      .then((r) => {
-        if (r.data.error) {
-          notifyError(r.data.error);
-          return;
-        }
-        if (r.data.exists) {
-          notifyInfo("Email already exists - Please sign in");
-        }
-        if (r.data.success) {
-          notifySuccess("Signup success");
-        }
-        navigate("/signin");
-      })
-      .catch((err) => notifyError(err.message));
-  };
+  e.preventDefault();
+  try {
+    const r = await axios.post("/api/signup", values);
+
+    if (r.data.error) {
+      notifyError(r.data.error);
+      return;
+    }
+
+    if (r.data.exists) {
+      notifyInfo("Email already exists - Please sign in");
+      return;
+    }
+
+    if (r.data.success) {
+      // NEW: notify user to check email
+      notifyInfo("Signup successful! Check your email to verify your account.");
+    }
+  } catch (err) {
+    notifyError(err.message);
+  }
+};
+
+
   // ----------------- Google Signup/Login -----------------
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
