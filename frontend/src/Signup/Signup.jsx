@@ -38,7 +38,6 @@ function Signup() {
     }
 
     if (r.data.success) {
-      // NEW: notify user to check email
       notifyInfo("Signup successful! Check your email to verify your account.");
     }
   } catch (err) {

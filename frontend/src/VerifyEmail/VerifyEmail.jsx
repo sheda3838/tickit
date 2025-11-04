@@ -33,9 +33,9 @@ function VerifyEmail() {
   return (
      <div className="verify-container">
       <div className="verify-box">
-        <h1 className={`verify-title ${status.includes("failed") || status.includes("Invalid") ? "error" : "success"}`}>
+        <h2 className={`verify-title ${status.includes("failed") || status.includes("Invalid") ? "error" : "success"}`}>
           {status}
-        </h1>
+        </h2>
         <p className="verify-subtext">
           {status.includes("successfully") ? "Redirecting to login..." : ""}
         </p>
